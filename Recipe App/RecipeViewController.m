@@ -7,8 +7,11 @@
 //
 
 #import "RecipeViewController.h"
+#import "RARecipe.h"
 
-@interface RecipeViewController ()
+@interface RecipeViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (strong, nonatomic) UITableView *recipeTable;
 
 @end
 
@@ -16,8 +19,52 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+
+   
     // Do any additional setup after loading the view.
+    
+    self.recipeTable = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+
+//    [self.recipeTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    [self.view addSubview:self.recipeTable];
+    self.recipeTable.dataSource = self;
+    
 }
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    // Return the number of rows in the section.
+    return [RARecipes count];
+}
+
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+       
+    
+    if (!cell) {
+    
+        
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+
+    }
+    
+    
+    NSString *title =[RARecipes titleAtIndex:indexPath.row];
+    cell.textLabel.text = title;
+
+    
+    NSString *descripcion =[RARecipes descriptionAtIndex:indexPath.row];
+    cell.detailTextLabel.text = descripcion;
+
+               
+    return cell;
+    }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
